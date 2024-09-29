@@ -1,0 +1,105 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #e9ecef; /* Light gray background */
+    margin: 0;
+    padding: 20px;
+}
+
+.title {
+    text-align: center; /* Center the title */
+    color: #007BFF; /* Blue color for title */
+    font-size: 2.5em; /* Increase the font size */
+    margin-bottom: 20px; /* Space below the title */
+    font-weight: bold; /* Bold text */
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+    .form-field label {
+        width: 120px;
+        display: inline-block;
+        font-weight: bold;
+    }
+
+    .form-field input,
+    .form-field select {
+        width: 200px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center; /* Center error message */
+}
+
+.grid-container {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#gvTransactions {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    #gvTransactions th,
+    #gvTransactions td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    #gvTransactions th {
+        background-color: #007BFF;
+        color: white;
+    }
+
+    #gvTransactions tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #gvTransactions tr:hover {
+        background-color: #ddd;
+    }
+
+.btn-action {
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+    .btn-action:hover {
+        background-color: #218838;
+    }
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+
+.balance-label {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    display: block;
+}
