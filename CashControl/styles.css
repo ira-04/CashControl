@@ -1,105 +1,205 @@
-﻿body {
+﻿/* Global Styles */
+body {
     font-family: Arial, sans-serif;
-    background-color: #e9ecef; /* Light gray background */
+    background-color: #ffffff; /* White background */
+    color: #000000; /* Black text */
     margin: 0;
     padding: 20px;
 }
 
-.title {
-    text-align: center; /* Center the title */
-    color: #007BFF; /* Blue color for title */
-    font-size: 2.5em; /* Increase the font size */
-    margin-bottom: 20px; /* Space below the title */
-    font-weight: bold; /* Bold text */
+h2.title {
+    text-align: center;
+    color: #333333; /* Dark gray for the title */
 }
 
 .form-field {
     margin-bottom: 15px;
 }
 
-    .form-field label {
-        width: 120px;
-        display: inline-block;
-        font-weight: bold;
-    }
+chart-field {
+    display: block;
+    box-sizing: border-box;
+    height: 500px;
+    width: 500px;
+}
 
-    .form-field input,
-    .form-field select {
-        width: 200px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+canvas {
+    display: block;
+    box-sizing: border-box;
+    height: 500px;
+    width: 500px;
+}
 
-        .form-field input:focus,
-        .form-field select:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-
-.error-message {
-    color: red;
+/* Label Styles */
+label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
-    text-align: center; /* Center error message */
 }
 
-.grid-container {
+/* Input Styles */
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #cccccc; /* Light gray border */
+    border-radius: 4px;
+}
+
+/* Button Styles */
+button,
+asp\:Button {
+    background-color: #000000; /* Black background */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+    button:hover,
+    asp\:Button:hover {
+        background-color: #444444; /* Dark gray on hover */
+    }
+
+/* Error Message Styles */
+.error-message {
+    color: red; /* Red color for error messages */
+    display: block;
+    margin-top: 10px;
+}
+
+/* Final Amount Label Styles */
+.final-amount {
+    font-size: 18px;
+    font-weight: bold;
     margin-top: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 }
 
-#gvTransactions {
+/* Search Box Styles */
+.search-sort-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.search-box {
+    flex-grow: 1;
+    margin-right: 10px; /* Space between search box and button */
+}
+
+/* GridView Styles */
+table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
-    #gvTransactions th,
-    #gvTransactions td {
+th, td {
+    border: 1px solid #cccccc; /* Light gray border */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0; /* Light gray for header */
+    font-weight: bold;
+}
+
+/* No Results Message Styles */
+#error-message {
+    text-align: center;
+    font-weight: bold;
+    color: red; /* Red color for no results message */
+}
+
+/* General Styles for the Edit UI */
+.gridview-edit-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%; /* Full width */
+    margin: 0 auto; /* Center align */
+}
+
+    /* Input Styles */
+    .gridview-edit-container input[type="text"],
+    .gridview-edit-container input[type="date"],
+    .gridview-edit-container select {
+        width: 100%; /* Full width */
         padding: 10px;
-        border: 1px solid #ddd;
+        border: 1px solid #cccccc; /* Light gray border */
+        border-radius: 4px;
+        margin-bottom: 10px; /* Space between fields */
     }
 
-    #gvTransactions th {
-        background-color: #007BFF;
-        color: white;
+    /* Button Styles */
+    .gridview-edit-container button,
+    .gridview-edit-container asp\:Button {
+        background-color: #000000; /* Black background */
+        color: #ffffff; /* White text */
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
     }
 
-    #gvTransactions tr:nth-child(even) {
-        background-color: #f2f2f2;
+        .gridview-edit-container button:hover,
+        .gridview-edit-container asp\:Button:hover {
+            background-color: #444444; /* Dark gray on hover */
+        }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gridview-edit-container {
+        flex-direction: column; /* Stack elements vertically */
     }
 
-    #gvTransactions tr:hover {
-        background-color: #ddd;
-    }
-
-.btn-action {
-    padding: 5px 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+        .gridview-edit-container input[type="text"],
+        .gridview-edit-container input[type="date"],
+        .gridview-edit-container select {
+            margin: 5px 0; /* Reduce margin for smaller screens */
+        }
 }
 
-    .btn-action:hover {
-        background-color: #218838;
-    }
-
-.btn-delete {
-    background-color: #dc3545;
+/* Additional Styling for Labels */
+.gridview-edit-container label {
+    font-weight: bold; /* Make labels bold */
+    margin-bottom: 5px; /* Space below labels */
 }
 
-    .btn-delete:hover {
-        background-color: #c82333;
-    }
+/* Error Message Styles */
+.gridview-edit-container .error-message {
+    color: red; /* Red color for error messages */
+    font-weight: bold; /* Bold for emphasis */
+    margin-top: 10px;
+    display: none; /* Hidden by default */
+}
 
-
-.balance-label {
-    font-size: 1.5em;
+/* Final Amount Label Styles */
+.gridview-edit-container .final-amount {
+    font-size: 18px;
     font-weight: bold;
     margin-top: 20px;
-    display: block;
+    color: #333; /* Dark gray color */
 }
+
+.btn-view-chart {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+    .btn-view-chart:hover {
+        background-color: #45a049;
+    }

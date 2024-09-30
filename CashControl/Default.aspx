@@ -9,6 +9,7 @@
     <form id="form1" runat="server">
         <div>
             <h2 class="title">Personal Finance Manager</h2>
+            <asp:HyperLink ID="lnkVisualPage" runat="server" NavigateUrl="~/Visual.aspx" CssClass="btn-view-chart">View Chart</asp:HyperLink>
 
             <div class="form-field">
                 <asp:Label ID="lblDate" runat="server" Text="Date:"></asp:Label>
@@ -46,17 +47,25 @@
             <!-- Label for displaying the final amount -->
             <asp:Label ID="lblFinalAmount" runat="server" CssClass="final-amount"></asp:Label><br /><br />
 
+            <!-- Search and Sort functionality -->
+            <div class="search-sort-container">
+                <asp:TextBox ID="txtSearch" runat="server" CssClass="search-box" placeholder="Search transactions..." OnTextChanged="txtSearch_TextChanged" AutoPostBack="True" />
+                <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn-search" />
+            </div>
+            <br /><br />
+
             <!-- GridView for transactions -->
             <asp:GridView ID="gvTransactions" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 OnRowEditing="gvTransactions_RowEditing" OnRowUpdating="gvTransactions_RowUpdating" 
-                OnRowDeleting="gvTransactions_RowDeleting" OnRowCancelingEdit="gvTransactions_RowCancelingEdit">
+                OnRowDeleting="gvTransactions_RowDeleting" OnRowCancelingEdit="gvTransactions_RowCancelingEdit"
+                OnSorting="gvTransactions_Sorting" AllowSorting="True">
                 <Columns>
                     <asp:BoundField DataField="Id" HeaderText="ID" ReadOnly="true" Visible="false" />
-                    <asp:BoundField DataField="Date" HeaderText="Date" />
-                    <asp:BoundField DataField="Description" HeaderText="Description" />
-                    <asp:BoundField DataField="Amount" HeaderText="Amount" DataFormatString="{0:C}" />
-                    <asp:BoundField DataField="Type" HeaderText="Type" />
-                    <asp:BoundField DataField="CategoryName" HeaderText="Category" />
+                    <asp:BoundField DataField="Date" HeaderText="Date" SortExpression="Date" />
+                    <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
+                    <asp:BoundField DataField="Amount" HeaderText="Amount" DataFormatString="{0:C}" SortExpression="Amount" />
+                    <asp:BoundField DataField="Type" HeaderText="Type" SortExpression="Type" />
+                    <asp:BoundField DataField="CategoryName" HeaderText="Category" SortExpression="CategoryName" />
 
                     <asp:TemplateField>
                         <ItemTemplate>
@@ -78,7 +87,13 @@
                     <asp:CommandField ShowDeleteButton="True" />
                 </Columns>
             </asp:GridView>
+
+            <asp:Label ID="lblNoResults" runat="server" CssClass="error-message" Visible="false"></asp:Label> <!-- Message for no results -->
         </div>
     </form>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 </body>
 </html>

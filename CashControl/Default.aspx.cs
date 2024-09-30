@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.Json;
 
 namespace PersonalFinanceManager
 {
@@ -18,6 +19,7 @@ namespace PersonalFinanceManager
                 LoadTransactions();
                 LoadCategories();
                 UpdateFinalAmount(); // Update final amount when the page loads
+                LoadChartData();
             }
         }
 
@@ -76,97 +78,69 @@ namespace PersonalFinanceManager
             ddlCategory.Items.Insert(0, new ListItem("Select a category", "0"));
         }
 
-        private void LoadTransactions()
+        private void LoadTransactions(string sortExpression = null, string sortDirection = "ASC", string searchQuery = null)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT t.*, c.Name AS CategoryName FROM Transactions t INNER JOIN Categories c ON t.CategoryId = c.Id";
+                string query = "SELECT t.*, c.Name AS CategoryName FROM Transactions t JOIN Categories c ON t.CategoryId = c.Id";
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query += " WHERE t.Description LIKE @SearchQuery";
+                }
+
+                if (!string.IsNullOrEmpty(sortExpression))
+                {
+                    query += " ORDER BY " + sortExpression + " " + sortDirection;
+                }
+
                 SqlCommand cmd = new SqlCommand(query, con);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    cmd.Parameters.AddWithValue("@SearchQuery", "%" + searchQuery + "%");
+                }
+
+                con.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
-                da.Fill(dt);
+                adapter.Fill(dt);
                 gvTransactions.DataSource = dt;
                 gvTransactions.DataBind();
-            }
-        }
 
-        protected void gvTransactions_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            gvTransactions.EditIndex = e.NewEditIndex;
-            LoadTransactions();
-        }
-
-        protected void gvTransactions_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-            // Get the ID of the row being updated
-            int id = Convert.ToInt32(gvTransactions.DataKeys[e.RowIndex].Value);
-
-            // Retrieve updated values from the GridView controls
-            GridViewRow row = gvTransactions.Rows[e.RowIndex];
-            TextBox txtDate = (TextBox)row.FindControl("txtDateEdit");  // Date cell
-            TextBox txtDescription = (TextBox)row.FindControl("txtDescriptionEdit");  // Description cell
-            TextBox txtAmount = (TextBox)row.FindControl("txtAmountEdit");  // Amount cell
-            DropDownList ddlType = (DropDownList)row.FindControl("ddlTypeEdit");  // Type dropdown in edit mode
-
-            if (txtDate != null && txtDescription != null && txtAmount != null && ddlType != null)
-            {
-                using (SqlConnection con = new SqlConnection(connectionString))
+                lblNoResults.Visible = dt.Rows.Count == 0;
+                if (lblNoResults.Visible)
                 {
-                    // Determine the amount based on the type
-                    decimal amount = decimal.Parse(txtAmount.Text);
-                    string type = ddlType.SelectedValue;
-
-                    // Adjust amount based on type (Expense or Income)
-                    if (type == "Expense")
-                    {
-                        amount = -Math.Abs(amount); // Make amount negative for expenses
-                    }
-                    else
-                    {
-                        amount = Math.Abs(amount); // Ensure amount is positive for income
-                    }
-
-                    string query = "UPDATE Transactions SET Date = @Date, Description = @Description, Amount = @Amount, Type = @Type WHERE Id = @Id";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@Date", DateTime.Parse(txtDate.Text));
-                    cmd.Parameters.AddWithValue("@Description", txtDescription.Text);
-                    cmd.Parameters.AddWithValue("@Amount", amount);
-                    cmd.Parameters.AddWithValue("@Type", type);
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    con.Open();
-                    cmd.ExecuteNonQuery();
+                    lblNoResults.Text = string.IsNullOrEmpty(searchQuery) ? "No data found." : "No transactions found matching the search criteria.";
                 }
             }
-
-            gvTransactions.EditIndex = -1;
-            LoadTransactions();
-            UpdateFinalAmount(); // Update final amount after a transaction is updated
         }
 
-
-        protected void gvTransactions_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            int id = Convert.ToInt32(gvTransactions.DataKeys[e.RowIndex].Value);
-            DeleteTransaction(id);
-            LoadTransactions();
-            UpdateFinalAmount();
+            string searchQuery = txtSearch.Text.Trim();
+            LoadTransactions(searchQuery: searchQuery);
         }
 
-        protected void gvTransactions_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        protected void btnFind_Click(object sender, EventArgs e)
         {
-            gvTransactions.EditIndex = -1;
-            LoadTransactions();
+            string searchQuery = txtSearch.Text.Trim();
+            LoadTransactions(searchQuery: searchQuery);
         }
 
-        private void DeleteTransaction(int id)
+        private void UpdateFinalAmount()
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "DELETE FROM Transactions WHERE Id = @Id";
+                string query = "SELECT SUM(Amount) AS FinalAmount FROM Transactions";
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@Id", id);
                 con.Open();
-                cmd.ExecuteNonQuery();
+                object result = cmd.ExecuteScalar();
+
+                if (result != DBNull.Value)
+                {
+                    decimal finalAmount = Convert.ToDecimal(result);
+                    lblFinalAmount.Text = "Final Balance: " + finalAmount.ToString("C");
+                }
             }
         }
 
@@ -179,19 +153,109 @@ namespace PersonalFinanceManager
             ddlCategory.SelectedIndex = 0;
         }
 
-        private void UpdateFinalAmount()
+        protected void gvTransactions_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            gvTransactions.EditIndex = e.NewEditIndex;
+            LoadTransactions();
+        }
+
+        protected void gvTransactions_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GridViewRow row = gvTransactions.Rows[e.RowIndex];
+            int transactionId = Convert.ToInt32(gvTransactions.DataKeys[e.RowIndex].Values[0]);
+            DateTime date = DateTime.Parse((row.FindControl("txtDateEdit") as TextBox).Text);
+            string description = (row.FindControl("txtDescriptionEdit") as TextBox).Text;
+            decimal amount = Convert.ToDecimal((row.FindControl("txtAmountEdit") as TextBox).Text);
+            string type = (row.FindControl("ddlTypeEdit") as DropDownList).SelectedValue;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "UPDATE Transactions SET Date=@Date, Description=@Description, Amount=@Amount, Type=@Type WHERE Id=@TransactionId";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Date", date);
+                cmd.Parameters.AddWithValue("@Description", description);
+                cmd.Parameters.AddWithValue("@Amount", amount);
+                cmd.Parameters.AddWithValue("@Type", type);
+                cmd.Parameters.AddWithValue("@TransactionId", transactionId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            gvTransactions.EditIndex = -1;
+            LoadTransactions();
+        }
+
+        protected void gvTransactions_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int transactionId = Convert.ToInt32(gvTransactions.DataKeys[e.RowIndex].Values[0]);
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "DELETE FROM Transactions WHERE Id=@TransactionId";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@TransactionId", transactionId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            LoadTransactions();
+            UpdateFinalAmount(); // Update final amount after deletion
+        }
+
+        protected void gvTransactions_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            gvTransactions.EditIndex = -1;
+            LoadTransactions();
+        }
+
+        protected void gvTransactions_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            // Determine the current sort direction
+            string sortDirection = "ASC";
+            string previousSortExpression = ViewState["SortExpression"] as string;
+
+            if (previousSortExpression != null)
+            {
+                if (previousSortExpression == e.SortExpression)
+                {
+                    sortDirection = ViewState["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
+                }
+            }
+
+            ViewState["SortExpression"] = e.SortExpression;
+            ViewState["SortDirection"] = sortDirection;
+
+            LoadTransactions(e.SortExpression, sortDirection, txtSearch.Text); // Load transactions with sorting
+        }
+
+        private void LoadChartData()
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT SUM(Amount) FROM Transactions";
+                string query = "SELECT c.Name AS Category, SUM(t.Amount) AS TotalAmount FROM Transactions t JOIN Categories c ON t.CategoryId = c.Id GROUP BY c.Name";
                 SqlCommand cmd = new SqlCommand(query, con);
                 con.Open();
-                object result = cmd.ExecuteScalar();
-                if (result != DBNull.Value)
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                var labels = new System.Collections.Generic.List<string>();
+                var data = new System.Collections.Generic.List<decimal>();
+
+                while (reader.Read())
                 {
-                    decimal finalAmount = Convert.ToDecimal(result);
-                    lblFinalAmount.Text = "Total Balance: " + finalAmount.ToString("C");
+                    labels.Add(reader["Category"].ToString());
+                    data.Add(Convert.ToDecimal(reader["TotalAmount"]));
                 }
+
+                var chartData = new
+                {
+                    labels = labels,
+                    data = data
+                };
+
+                string serializedChartData = JsonSerializer.Serialize(chartData);
+
+                // Register chart data as a startup script to make it accessible in the front-end
+                ClientScript.RegisterStartupScript(this.GetType(), "ChartData", $"var chartData = {serializedChartData};", true);
             }
         }
     }
