@@ -1,206 +1,375 @@
-﻿/* Global Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #ccffff; /* White background */
-    color: #000000; /* Black text */
+﻿/* General Styles */
+/*body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f8fc;
+    color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
 h2.title {
     text-align: center;
-    color: #002d80; /* Dark gray for the title */
-    
+    color: #333;
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: 600;
+}*/
+
+/* Form Styles */
+/*form {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-field {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-chart-field {
+.form-field label {
     display: block;
-    box-sizing: border-box;
-    height: 500px;
-    width: 500px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 8px;
 }
 
-canvas {
-    display: block;
-    box-sizing: border-box;
-    height: 500px;
-    width: 500px;
-}
-
-/* Label Styles */
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-/* Input Styles */
-input[type="text"],
-input[type="date"],
-select {
+.form-field input[type="text"], 
+.form-field input[type="date"], 
+.form-field input[type="number"], 
+.form-field select {
     width: 100%;
-    padding: 8px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #cccccc; /* Light gray border */
-    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
-/* Button Styles */
-button,
-asp\:Button {
-    background-color: #000000; /* Black background */
-    color: #ffffff; /* White text */
-    border: none;
+button, .btn-search, .btn-export {
+    background-color: #007bff;
+    color: white;
     padding: 10px 15px;
-    border-radius: 4px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-size: 14px;
 }
 
-    button:hover,
-    asp\:Button:hover {
-        background-color: #444444; /* Dark gray on hover */
-    }
+button:hover, .btn-search:hover, .btn-export:hover {
+    background-color: #0056b3;
+}
 
-/* Error Message Styles */
 .error-message {
-    color: red; /* Red color for error messages */
-    display: block;
-    margin-top: 10px;
+    color: #e74c3c;
+    font-size: 14px;
 }
 
-/* Final Amount Label Styles */
 .final-amount {
     font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
+    font-weight: 600;
+    color: #27ae60;
 }
 
-/* Search Box Styles */
 .search-sort-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .search-box {
-    flex-grow: 1;
-    margin-right: 10px; /* Space between search box and button */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 250px;
 }
 
-/* GridView Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    border: 1px solid #cccccc; /* Light gray border */
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f0f0f0; /* Light gray for header */
-    font-weight: bold;
-}
-
-/* No Results Message Styles */
-#error-message {
-    text-align: center;
-    font-weight: bold;
-    color: red; /* Red color for no results message */
-}
-
-/* General Styles for the Edit UI */
-.gridview-edit-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 100%; /* Full width */
-    margin: 0 auto; /* Center align */
-}
-
-    /* Input Styles */
-    .gridview-edit-container input[type="text"],
-    .gridview-edit-container input[type="date"],
-    .gridview-edit-container select {
-        width: 100%; /* Full width */
-        padding: 10px;
-        border: 1px solid #cccccc; /* Light gray border */
-        border-radius: 4px;
-        margin-bottom: 10px; /* Space between fields */
-    }
-
-    /* Button Styles */
-    .gridview-edit-container button,
-    .gridview-edit-container asp\:Button {
-        background-color: #000000; /* Black background */
-        color: #ffffff; /* White text */
-        border: none;
-        padding: 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-
-        .gridview-edit-container button:hover,
-        .gridview-edit-container asp\:Button:hover {
-            background-color: #444444; /* Dark gray on hover */
-        }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .gridview-edit-container {
-        flex-direction: column; /* Stack elements vertically */
-    }
-
-        .gridview-edit-container input[type="text"],
-        .gridview-edit-container input[type="date"],
-        .gridview-edit-container select {
-            margin: 5px 0; /* Reduce margin for smaller screens */
-        }
-}
-
-/* Additional Styling for Labels */
-.gridview-edit-container label {
-    font-weight: bold; /* Make labels bold */
-    margin-bottom: 5px; /* Space below labels */
-}
-
-/* Error Message Styles */
-.gridview-edit-container .error-message {
-    color: red; /* Red color for error messages */
-    font-weight: bold; /* Bold for emphasis */
-    margin-top: 10px;
-    display: none; /* Hidden by default */
-}
-
-/* Final Amount Label Styles */
-.gridview-edit-container .final-amount {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-    color: #333; /* Dark gray color */
+.search-box::placeholder {
+    font-style: italic;
+    color: #999;
 }
 
 .btn-view-chart {
     display: inline-block;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
 }
 
-    .btn-view-chart:hover {
-        background-color: #45a049;
+.btn-view-chart:hover {
+    background-color: #218838;
+}*/
+
+/* GridView Styles */
+/*.grid-view-container {
+    margin-top: 30px;
+}
+
+.grid-view table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.grid-view th, .grid-view td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.grid-view th {
+    background-color: #007bff;
+    color: white;
+}
+
+.grid-view td {
+    background-color: #fff;
+}
+
+.grid-view tr:hover {
+    background-color: #f1f1f1;
+}
+
+.grid-view .edit-link, .grid-view .delete-link {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.grid-view .edit-link:hover, .grid-view .delete-link:hover {
+    text-decoration: underline;
+}
+
+.grid-view .update-button, .grid-view .cancel-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.grid-view .cancel-button {
+    background-color: #dc3545;
+}
+
+.grid-view .update-button:hover {
+    background-color: #218838;
+}
+
+.grid-view .cancel-button:hover {
+    background-color: #c82333;
+}*/
+
+/* Footer styles */
+/*footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #007bff;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}*/
+/* General styling for the page */
+/* General form styling */
+/* Form styling */
+/* Form styling */
+/* Form styling */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    background-color: black; /* Set background color to black */
+    color: white; /* Default text color */
+    font-family: 'Roboto', sans-serif; /* Apply Roboto font */
+}
+
+/* Form styling */
+form {
+    margin: 20px auto;
+    padding: 30px;
+    border: 1px solid #444; /* Darker border for better contrast */
+    border-radius: 10px; /* Slightly more rounded corners */
+    max-width: 1200px;
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* More pronounced shadow for depth */
+    color: black; /* Text color */
+    font-weight: bold; /* Make text bold */
+}
+
+input, select, button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    background-color: #f8f9fa; /* Light grey background */
+    color: black; /* Text color */
+    border: 1px solid #ccc; /* Softer border */
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: #003366; /* Navy blue border on focus */
+        box-shadow: 0 0 8px rgba(0, 51, 102, 0.6); /* Slightly more pronounced glow */
     }
+
+button,.btn-add,.btn-find, .btn-chart, .btn-edit, .btn-update, .btn-cancel, .btn-export, .btn-delete {
+    background-color: #003366; /* Navy Blue background */
+    color: #ffffff; /* White color for button text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 12px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Button animation */
+    font-weight: bold; /* Make button text bold */
+}
+
+    button:hover, .btn-edit:hover, .btn-update:hover, .btn-cancel:hover, .btn-export:hover {
+        background-color: #002244; /* Darker Navy Blue on hover */
+        transform: translateY(-2px); /* Slight lift on hover */
+    }
+
+    button:disabled {
+        background-color: #555;
+        cursor: not-allowed;
+    }
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold; /* Make label text bold */
+    color: #003366; /* Navy Blue color for labels */
+}
+
+.error-message {
+    color: #ff4c4c; /* Red for error messages */
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.success-message {
+    color: #28a745; /* Green for success messages */
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+    form {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    input, select, button {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px;
+    }
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #ffffff; /* White background for table */
+    color: #003366; /* Navy Blue text color */
+}
+
+    /* Header styling */
+    .table th {
+        background-color: #003366; /* Navy Blue header */
+        color: #ffffff; /* White text for headers */
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #ccc; /* Lighter border */
+    }
+
+    /* Row styling */
+    .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ccc; /* Light border between rows */
+        background-color: #f8f9fa; /* Light grey background for rows */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Hover effect for rows */
+    .table tr:hover td {
+        background-color: #e2e6ea; /* Lighter grey on hover */
+    }
+
+/* Link styling */
+a {
+    color: white; /* Navy Blue for links */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+    a:hover {
+        color: whitesmoke; /* Darker Navy Blue on hover */
+    }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table {
+        display: block;
+        overflow-x: auto; /* Enable horizontal scroll for smaller screens */
+        white-space: nowrap;
+    }
+
+        .table th, .table td {
+            font-size: 14px; /* Adjust font size */
+            padding: 10px; /* Adjust padding */
+        }
+}
+
+@media (max-width: 480px) {
+    .table th, .table td {
+        font-size: 12px; /* Smaller font size on mobile */
+        padding: 8px; /* Smaller padding */
+    }
+}
+.chart-field {
+    background-color: #ffffff; /* White background for charts */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin: 0 auto; /* Center charts */
+    padding: 20px; /* Add padding for better spacing */
+}
+
+.chart-section {
+    width: 100%; /* Use full width for each chart section */
+    max-width: 1200px; /* Set a maximum width for larger screens */
+    height: 500px; /* Set a fixed height for charts */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chart-container {
+        flex-direction: column; /* Stack charts on smaller screens */
+    }
+
+    .chart-section {
+        width: 100%; /* Full width for smaller screens */
+        height: 400px; /* Adjust height for smaller screens */
+        margin-bottom: 20px; /* Space between stacked charts */
+    }
+}

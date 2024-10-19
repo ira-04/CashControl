@@ -95,6 +95,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Database1.mdf" />
+    <Content Include="App_Data\Database1_log.ldf">
+      <DependentUpon>Database1.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\FinanceDB.mdf" />
     <Content Include="App_Data\FinanceDB_log.ldf">
       <DependentUpon>FinanceDB.mdf</DependentUpon>

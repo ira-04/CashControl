@@ -6,11 +6,10 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
+    <div>
     <form id="form1" runat="server">
         <div>
             <h2 class="title">Personal Finance Manager</h2>
-
-            
 
             <div class="form-field">
                 <asp:Label ID="lblDate" runat="server" Text="Date:"></asp:Label>
@@ -40,7 +39,7 @@
                 <asp:DropDownList ID="ddlCategory" runat="server"></asp:DropDownList>
             </div>
 
-            <asp:Button ID="btnAdd" runat="server" Text="Add Transaction" OnClick="btnAddTransaction_Click" /><br /><br />
+            <asp:Button ID="btnAdd" runat="server" Text="Add Transaction" OnClick="btnAddTransaction_Click" CssClass="btn-add"/><br /><br />
 
             <!-- Error message label -->
             <asp:Label ID="lblError" runat="server" CssClass="error-message" Visible="false"></asp:Label><br /><br />
@@ -48,10 +47,12 @@
             <!-- Label for displaying the final amount -->
             <asp:Label ID="lblFinalAmount" runat="server" CssClass="final-amount"></asp:Label><br /><br />
 
+
+    </div>
             <!-- Search and Sort functionality -->
             <div class="search-sort-container">
                 <asp:TextBox ID="txtSearch" runat="server" CssClass="search-box" placeholder="Search transactions..." OnTextChanged="txtSearch_TextChanged" AutoPostBack="True" />
-                <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn-search" />
+                <asp:Button ID="btnFind" runat="server" Text="Find" OnClick="btnFind_Click" CssClass="btn-find" />
             </div>
             <br /><br />
 
@@ -61,7 +62,7 @@
             <asp:GridView ID="gvTransactions" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 OnRowEditing="gvTransactions_RowEditing" OnRowUpdating="gvTransactions_RowUpdating" 
                 OnRowDeleting="gvTransactions_RowDeleting" OnRowCancelingEdit="gvTransactions_RowCancelingEdit"
-                OnSorting="gvTransactions_Sorting" AllowSorting="True">
+                OnSorting="gvTransactions_Sorting" AllowSorting="True" CssClass="table">
                 <Columns>
                     <asp:BoundField DataField="Id" HeaderText="ID" ReadOnly="true" Visible="false" />
                     <asp:BoundField DataField="Date" HeaderText="Date" SortExpression="Date" />
@@ -72,28 +73,28 @@
 
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="EditButton" runat="server" CommandName="Edit" Text="Edit" />
+                            <asp:LinkButton ID="EditButton" runat="server" CommandName="Edit" Text="Edit" CssClass="btn-edit"/>
+                            <asp:LinkButton ID="DeleteButton" runat="server" CommandName="Delete" Text="Delete" CssClass="btn-delete" />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:TextBox ID="txtDateEdit" runat="server" Text='<%# Bind("Date", "{0:yyyy-MM-dd}") %>' TextMode="Date" />
-                            <asp:TextBox ID="txtDescriptionEdit" runat="server" Text='<%# Bind("Description") %>' />
-                            <asp:TextBox ID="txtAmountEdit" runat="server" Text='<%# Bind("Amount") %>' />
+                            <asp:TextBox ID="txtDateEdit" runat="server" Text='<%# Bind("Date", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="edit-input"  />
+                            <asp:TextBox ID="txtDescriptionEdit" runat="server" Text='<%# Bind("Description") %>' CssClass="edit-input"  />
+                            <asp:TextBox ID="txtAmountEdit" runat="server" Text='<%# Bind("Amount") %>'  CssClass="edit-input" />
                             <asp:DropDownList ID="ddlTypeEdit" runat="server">
                                 <asp:ListItem Text="Income" Value="Income"></asp:ListItem>
                                 <asp:ListItem Text="Expense" Value="Expense"></asp:ListItem>
                             </asp:DropDownList>
-                            <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" Text="Update" />
-                            <asp:LinkButton ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
+                            <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" Text="Update" CssClass="btn-update" />
+                            <asp:LinkButton ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" CssClass="btn-cancel" />
                         </EditItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:CommandField ShowDeleteButton="True" />
                 </Columns>
             </asp:GridView>
 
             <asp:Label ID="lblNoResults" runat="server" CssClass="error-message" Visible="false"></asp:Label> <!-- Message for no results -->
             <div style = "margin-top:50px;">
-                 <asp:HyperLink ID="lnkVisualPage" runat="server" NavigateUrl="~/Visual.aspx" CssClass="btn-view-chart">View Chart</asp:HyperLink>
+                 <asp:HyperLink ID="lnkVisualPage" runat="server" NavigateUrl="~/Visual.aspx" CssClass="btn-chart">View Chart</asp:HyperLink>
             </div>
         </div>
     </form>
