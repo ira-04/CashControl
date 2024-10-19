@@ -1,7 +1,7 @@
 ﻿/* Global Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff; /* White background */
+    background-color: #ccffff; /* White background */
     color: #000000; /* Black text */
     margin: 0;
     padding: 20px;
@@ -9,7 +9,8 @@ body {
 
 h2.title {
     text-align: center;
-    color: #333333; /* Dark gray for the title */
+    color: #002d80; /* Dark gray for the title */
+    
 }
 
 .form-field {

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text.Json;
+using System.Text;
 
 namespace PersonalFinanceManager
 {
@@ -12,6 +13,46 @@ namespace PersonalFinanceManager
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["FinanceDB"].ConnectionString;
 
+
+        protected void btnExport_Click(object sender, EventArgs e)
+        {
+            // Clear any previous output
+            Response.Clear();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment;filename=Transactions.csv");
+            Response.Charset = "";
+            Response.ContentType = "application/text";
+
+            StringBuilder sb = new StringBuilder();
+
+            // Add column headers
+            for (int i = 0; i < gvTransactions.Columns.Count; i++)
+            {
+                if (gvTransactions.Columns[i].Visible) // Only export visible columns
+                {
+                    sb.Append(gvTransactions.Columns[i].HeaderText + ',');
+                }
+            }
+            sb.Append("\r\n");
+
+            // Add rows
+            foreach (GridViewRow row in gvTransactions.Rows)
+            {
+                for (int i = 0; i < gvTransactions.Columns.Count; i++)
+                {
+                    if (gvTransactions.Columns[i].Visible) // Only export visible columns
+                    {
+                        sb.Append(row.Cells[i].Text.Replace(",", "") + ','); // Avoid extra commas in CSV
+                    }
+                }
+                sb.Append("\r\n");
+            }
+
+            // Output the CSV file
+            Response.Output.Write(sb.ToString());
+            Response.Flush();
+            Response.End();
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -171,6 +212,7 @@ namespace PersonalFinanceManager
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = "UPDATE Transactions SET Date=@Date, Description=@Description, Amount=@Amount, Type=@Type WHERE Id=@TransactionId";
+
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@Date", date);
                 cmd.Parameters.AddWithValue("@Description", description);
@@ -180,7 +222,7 @@ namespace PersonalFinanceManager
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-
+            UpdateFinalAmount();
             gvTransactions.EditIndex = -1;
             LoadTransactions();
         }
@@ -257,6 +299,11 @@ namespace PersonalFinanceManager
                 // Register chart data as a startup script to make it accessible in the front-end
                 ClientScript.RegisterStartupScript(this.GetType(), "ChartData", $"var chartData = {serializedChartData};", true);
             }
+        }
+
+        protected void txtDate_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

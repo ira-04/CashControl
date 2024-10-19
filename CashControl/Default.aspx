@@ -9,11 +9,12 @@
     <form id="form1" runat="server">
         <div>
             <h2 class="title">Personal Finance Manager</h2>
-            <asp:HyperLink ID="lnkVisualPage" runat="server" NavigateUrl="~/Visual.aspx" CssClass="btn-view-chart">View Chart</asp:HyperLink>
+
+            
 
             <div class="form-field">
                 <asp:Label ID="lblDate" runat="server" Text="Date:"></asp:Label>
-                <asp:TextBox ID="txtDate" runat="server" TextMode="Date"></asp:TextBox>
+                <asp:TextBox ID="txtDate" runat="server" TextMode="Date" OnTextChanged="txtDate_TextChanged"></asp:TextBox>
             </div>
 
             <div class="form-field">
@@ -54,6 +55,8 @@
             </div>
             <br /><br />
 
+            <asp:Button ID="btnExport" runat="server" Text="Export to CSV" OnClick="btnExport_Click" CssClass="btn-export" />
+
             <!-- GridView for transactions -->
             <asp:GridView ID="gvTransactions" runat="server" AutoGenerateColumns="False" DataKeyNames="Id"
                 OnRowEditing="gvTransactions_RowEditing" OnRowUpdating="gvTransactions_RowUpdating" 
@@ -89,6 +92,9 @@
             </asp:GridView>
 
             <asp:Label ID="lblNoResults" runat="server" CssClass="error-message" Visible="false"></asp:Label> <!-- Message for no results -->
+            <div style = "margin-top:50px;">
+                 <asp:HyperLink ID="lnkVisualPage" runat="server" NavigateUrl="~/Visual.aspx" CssClass="btn-view-chart">View Chart</asp:HyperLink>
+            </div>
         </div>
     </form>
     <br/>
